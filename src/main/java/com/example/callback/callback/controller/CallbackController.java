@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class CallbackController {
-  // todo: service 던지고 return
   private final CallbackService callbackService;
 
   @PostMapping

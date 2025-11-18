@@ -4,5 +4,5 @@ import com.example.callback.callback.controller.req.CallbackRequest;
 
 public interface ExternalQueuePublisher {
 
-  public void publish(CallbackRequest request);
+  void publish(CallbackRequest request);
 }
