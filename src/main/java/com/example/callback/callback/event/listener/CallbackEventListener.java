@@ -23,7 +23,8 @@ public class CallbackEventListener {
    * todo 1: 요청 데이터 파일 저장 이벤트 처리기
    * @Async를 통해 이 메서드는 Controller의 응답과 관계없이 별도 스레드에서 실행됩니다.
    */
-  @Async
+
+  @Async("fileTaskExecutor")
   @EventListener
   public void saveCallbackToFile(CallbackReceivedEvent event) {
     CallbackRequest request = event.getRequest();
@@ -43,7 +44,7 @@ public class CallbackEventListener {
    * todo 2: 외부 큐를 위한 이벤트 발행기
    * 동일한 이벤트를 받아, 큐 발행 로직을 비동기로 처리합니다.
    */
-  @Async
+  @Async("queueTaskExecutor")
   @EventListener
   public void publishToExternalQueue(CallbackReceivedEvent event) {
     log.info("Publishing event to external queue...");
