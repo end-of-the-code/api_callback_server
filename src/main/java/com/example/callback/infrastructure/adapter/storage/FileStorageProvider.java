@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Primary
 @Component
-public class FilStorageProvider implements StorageProvider {
+public class FileStorageProvider implements StorageProvider {
 
   @Override
   public void save(CallbackReceivedEvent data) {

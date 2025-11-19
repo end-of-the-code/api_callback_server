@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 //@Primary
 @Component
 @RequiredArgsConstructor
-public class FilStorageJsonProvider implements StorageProvider {
+public class FileStorageJsonProvider implements StorageProvider {
 
   // Spring Boot가 자동으로 구성해준 ObjectMapper를 주입받습니다.
   private final ObjectMapper objectMapper;
