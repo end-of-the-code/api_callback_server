@@ -1,8 +1,8 @@
-package com.example.callback.infrastructure.storage;
+package com.example.callback.infrastructure.adapter.storage;
 
 import com.example.callback.callback.controller.req.CallbackRequest;
 import com.example.callback.callback.event.CallbackReceivedEvent;
-import com.example.callback.callback.service.StorageProvider;
+import com.example.callback.callback.service.port.StorageProvider;
 import java.io.FileWriter;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;

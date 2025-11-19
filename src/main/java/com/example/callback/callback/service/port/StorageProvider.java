@@ -1,4 +1,4 @@
-package com.example.callback.callback.service;
+package com.example.callback.callback.service.port;
 
 import com.example.callback.callback.event.CallbackReceivedEvent;
 import org.springframework.stereotype.Service;

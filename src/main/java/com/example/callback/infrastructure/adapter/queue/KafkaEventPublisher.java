@@ -1,6 +1,7 @@
-package com.example.callback.infrastructure.queue;
+package com.example.callback.infrastructure.adapter.queue;
 
 import com.example.callback.callback.controller.req.CallbackRequest;
+import com.example.callback.callback.service.port.ExternalQueuePublisher;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,11 +1,8 @@
 package com.example.callback.callback.event.listener;
 
-import com.example.callback.callback.controller.req.CallbackRequest;
 import com.example.callback.callback.event.CallbackReceivedEvent;
-import com.example.callback.callback.service.StorageProvider;
-import com.example.callback.infrastructure.queue.ExternalQueuePublisher;
-import java.io.FileWriter;
-import java.io.IOException;
+import com.example.callback.callback.service.port.StorageProvider;
+import com.example.callback.callback.service.port.ExternalQueuePublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
