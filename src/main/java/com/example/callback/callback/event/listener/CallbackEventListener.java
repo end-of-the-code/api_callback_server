@@ -2,6 +2,7 @@ package com.example.callback.callback.event.listener;
 
 import com.example.callback.callback.controller.req.CallbackRequest;
 import com.example.callback.callback.event.CallbackReceivedEvent;
+import com.example.callback.callback.service.StorageProvider;
 import com.example.callback.infrastructure.queue.ExternalQueuePublisher;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class CallbackEventListener {
 
   // 추상화된 큐 발행 인터페이스를 주입받습니다.
   private final ExternalQueuePublisher externalQueuePublisher;
+  private final StorageProvider storageProvider;
 
   /**
    * todo 1: 요청 데이터 파일 저장 이벤트 처리기
@@ -27,16 +29,15 @@ public class CallbackEventListener {
   @Async("fileTaskExecutor")
   @EventListener
   public void saveCallbackToFile(CallbackReceivedEvent event) {
-    CallbackRequest request = event.getRequest();
 
-    // 파일 쓰기는 I/O 작업이므로 비동기가 필수입니다.
-    try (FileWriter writer = new FileWriter("callback_log.txt", true)) { // 이어쓰기
-      // 실제 프로덕션에서는 JSON 변환 등을 고려해야 합니다.
-      writer.write(request.toString() + "\n");
+    try {
+      storageProvider.save(event);
       log.info("Callback data saved to file.");
-    } catch (IOException e) {
+
+    } catch (Exception e) {
       log.error("Failed to write callback to file", e);
       // todo: 파일 쓰기 실패 시 예외 처리 (e.g., DLQ, 에러 로그)
+
     }
   }
 
