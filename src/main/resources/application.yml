@@ -1,0 +1,8 @@
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092 # Docker Kafka 주소
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer # 객체를 JSON으로 직렬화
+      retries: 3 # 전송 실패 시 재시도 횟수
+      acks: all  # 가장 강력한 저장 보장 (Master + Replica 모두 저장 확인)
