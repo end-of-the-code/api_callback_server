@@ -1,4 +1,4 @@
-package com.example.callback.infrastructure;
+package com.example.callback.infrastructure.queue;
 
 import com.example.callback.callback.controller.req.CallbackRequest;
 

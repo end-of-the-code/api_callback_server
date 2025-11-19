@@ -2,7 +2,7 @@ package com.example.callback.callback.event.listener;
 
 import com.example.callback.callback.controller.req.CallbackRequest;
 import com.example.callback.callback.event.CallbackReceivedEvent;
-import com.example.callback.infrastructure.ExternalQueuePublisher;
+import com.example.callback.infrastructure.queue.ExternalQueuePublisher;
 import java.io.FileWriter;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
