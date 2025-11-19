@@ -6,9 +6,11 @@ import com.example.callback.callback.service.port.StorageProvider;
 import java.io.FileWriter;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 @Slf4j
+@Primary
 @Component
 public class FilStorageProvider implements StorageProvider {
 
