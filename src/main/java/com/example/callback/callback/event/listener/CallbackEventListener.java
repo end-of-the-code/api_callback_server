@@ -1,8 +1,8 @@
 package com.example.callback.callback.event.listener;
 
-import com.example.callback.callback.event.CallbackReceivedEvent;
-import com.example.callback.callback.service.port.StorageProvider;
+import com.example.callback.callback.event.CallbackEvent;
 import com.example.callback.callback.service.port.ExternalQueuePublisher;
+import com.example.callback.callback.service.port.StorageProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -25,7 +25,7 @@ public class CallbackEventListener {
 
   @Async("fileTaskExecutor")
   @EventListener
-  public void saveCallbackToFile(CallbackReceivedEvent event) {
+  public void saveCallbackToFile(CallbackEvent event) {
 
     try {
       storageProvider.save(event);
@@ -44,9 +44,9 @@ public class CallbackEventListener {
    */
   @Async("queueTaskExecutor")
   @EventListener
-  public void publishToExternalQueue(CallbackReceivedEvent event) {
+  public void publishToExternalQueue(CallbackEvent event) {
     log.info("Publishing event to external queue...");
     // 실제 로직은 주입받은 구현체(ExternalQueuePublisher)가 수행합니다.
-    externalQueuePublisher.publish(event.getRequest());
+    externalQueuePublisher.publish(event.getPayload());
   }
 }

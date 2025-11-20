@@ -1,6 +1,6 @@
 package com.example.callback.callback.event;
 
-import com.example.callback.callback.controller.req.CallbackRequest;
+import com.example.callback.infrastructure.adapter.queue.CallbackPayload;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -9,6 +9,6 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public class CallbackReceivedEvent {
-  private final CallbackRequest request;
+public class CallbackEvent {
+  private final CallbackPayload payload;
 }

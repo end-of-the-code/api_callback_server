@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class CallbackRequest {
-  private Long userId;
+  private Long txId;
   private String message;
 }

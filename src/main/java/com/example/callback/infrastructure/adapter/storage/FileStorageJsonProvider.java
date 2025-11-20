@@ -1,8 +1,8 @@
 package com.example.callback.infrastructure.adapter.storage;
 
-import com.example.callback.callback.controller.req.CallbackRequest;
-import com.example.callback.callback.event.CallbackReceivedEvent;
+import com.example.callback.callback.event.CallbackEvent;
 import com.example.callback.callback.service.port.StorageProvider;
+import com.example.callback.infrastructure.adapter.queue.CallbackPayload;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.FileWriter;
@@ -21,8 +21,8 @@ public class FileStorageJsonProvider implements StorageProvider {
   private final ObjectMapper objectMapper;
 
   @Override
-  public void save(CallbackReceivedEvent data) {
-    CallbackRequest request = data.getRequest();
+  public void save(CallbackEvent data) {
+    CallbackPayload request = data.getPayload();
 
     try (FileWriter writer = new FileWriter("callback_log.txt", true)) {
 

@@ -1,8 +1,8 @@
 package com.example.callback.callback.service.port;
 
-import com.example.callback.callback.controller.req.CallbackRequest;
+import com.example.callback.infrastructure.adapter.queue.CallbackPayload;
 
 public interface ExternalQueuePublisher {
 
-  void publish(CallbackRequest request);
+  void publish(CallbackPayload payload);
 }
