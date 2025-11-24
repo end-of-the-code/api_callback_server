@@ -5,6 +5,9 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 /src/callback_log.txt
+/logs
+/data/kafka
+/data/zookeeper
 
 ### STS ###
 .apt_generated
