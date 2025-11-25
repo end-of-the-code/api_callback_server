@@ -32,9 +32,9 @@ spring:
         retry.backoff.ms: 500
 
         # 연결 끊겼을 때 재접속 시도 간격
-        reconnect.backoff.ms: 1000
+        reconnect.backoff.ms: 10000
         # 재접속 시도 간격이 늘어나다가 멈추는 '상한선(최대치)
-        reconnect.backoff.max.ms: 5000
+        reconnect.backoff.max.ms: 30000
 
         # [4] 성능 튜닝 (배치 전송)
         # 메시지를 하나씩 안 보내고 모아서 보냄 (처리량 증가)
