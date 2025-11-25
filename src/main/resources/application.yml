@@ -7,5 +7,36 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer # 객체를 JSON으로 직렬화
-      retries: 3 # 전송 실패 시 재시도 횟수
+
+      # [1] 데이터 신뢰성 설정
       acks: all  # 가장 강력한 저장 보장 (Master + Replica 모두 저장 확인)
+
+      properties:
+        # [2] 재시도 및 멱등성 (중복 방지) / 중복 전송을 막고 순서 보장
+        enable.idempotence: true
+        retries: 3 # 전송 실패 시 재시도 횟수
+
+        # [3] 타임아웃 설정 (매우 중요)
+        # 카프카로 메시지를 보내려고 메모리 버퍼에 넣을 때 기다리는 최대 시간
+        # 이 시간이 지나면 예외 발생 -> 발생 시 파일로 저장
+        max.block.ms: 5000  # 5초
+
+        # 메시지 전송 시작 후 성공/실패 확정까지 기다리는 전체 시간
+        delivery.timeout.ms: 10000 # 10초 (재시도 포함)
+
+        # 한 번 요청 보낼 때 기다리는 시간
+        # 반드시 delivery.timeout.ms 보다 작아야 함 (예: 3초)
+        request.timeout.ms: 3000
+
+        # 실패하면 0.5초 쉬었다가 다시 시도 (너무 빨리 재시도하면 서버 부하)
+        retry.backoff.ms: 500
+
+        # 연결 끊겼을 때 재접속 시도 간격
+        reconnect.backoff.ms: 10000
+        # 재접속 시도 간격이 늘어나다가 멈추는 '상한선(최대치)
+        reconnect.backoff.max.ms: 30000
+
+        # [4] 성능 튜닝 (배치 전송)
+        # 메시지를 하나씩 안 보내고 모아서 보냄 (처리량 증가)
+        linger.ms: 5     # 5ms 정도만 기다렸다가 모아서 발송
+        batch.size: 16384 # 16KB 단위로 배칭
