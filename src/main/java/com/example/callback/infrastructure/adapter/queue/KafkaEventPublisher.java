@@ -28,45 +28,39 @@ public class KafkaEventPublisher implements ExternalQueuePublisher {
 
   @Override
   public void publish(CallbackPayload payload) {
-    String jsonPayload = "";
+    // 지금은 단순히 로그만 찍습니다.
+    log.info("KafakaPublisher send : {}", payload.toString());
 
+    log.info("Sending data to Kafka topic: {}", TOPIC);
 
+    // 1. 비동기 전송 (Async)
+    // kafkaTemplate.send()는 Future를 반환하므로 메인 스레드를 차단하지 않습니다.
+    CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(TOPIC, payload);
 
-    try {
-// 객체 -> JSON 변환 (StringSerializer 사용 시 필수)
-      jsonPayload = objectMapper.writeValueAsString(payload);
+    // 2. 결과 콜백 처리 (성공/실패 여부 확인)
+    future.whenComplete((result, ex) -> {
+      if (ex == null) {
+        // 성공
+        log.info("Kafka send success: offset=[{}]", result.getRecordMetadata().offset());
+      } else {
+        // ★★★ 장애 대응: 카프카 전송 실패 시 ★★★
+        // 여기서 예외가 발생했다는 것은 Kafka가 죽었거나 네트워크 문제라는 뜻입니다.
+        log.error("Kafka send failed! Data: {}", payload, ex);
 
-      log.info("KafakaPublisher send : {}", jsonPayload);
-      log.info("Sending data to Kafka topic: {}", TOPIC);
-      // 1. 비동기 전송 (Async)
-      // kafkaTemplate.send()는 Future를 반환하므로 메인 스레드를 차단하지 않습니다.
-      CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(TOPIC, jsonPayload);
-
-      // 2. 결과 콜백 처리 (성공/실패 여부 확인)
-      String finalJsonPayload = jsonPayload;
-      future.whenComplete((result, ex) -> {
-        if (ex == null) {
-          log.info("Kafka send success: offset=[{}]", result.getRecordMetadata().offset());
-        } else {
-          log.error("Kafka send failed! Data: {}", finalJsonPayload, ex);
-          handleFallback(finalJsonPayload);
-        }
-      });
-
-    } catch (Exception e) {
-      // 카프카가 꺼져 있으면 send()에서 바로 여기로 튕겨져 나옵니다.
-      log.error("Kafka Down/Timeout: {}", e.getMessage());
-      handleFallback(jsonPayload);
-    }
-
+        // TODO: 이전에 설계한 '비상 파일 저장' 로직을 여기서 호출하거나,
+        // 별도의 fallback 처리를 해야 합니다.
+        handleFallback(payload);
+      }
+    });
   }
 
   // 카프카 이벤트 발행 후 콜백 응답 실패 시
-  private void handleFallback(String jsonPayload) {
-
+  private void handleFallback(CallbackPayload payload) {
+    // TODO: Kafka 장애 시 로컬 파일로 백업하는 로직 (구현 필요)
     log.warn("Saving to emergency local file instead...");
 
     try {
+
       String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
       String fileName = "kafka-error-" + today + ".log";
@@ -77,7 +71,7 @@ public class KafkaEventPublisher implements ExternalQueuePublisher {
       }
 
       // CREATE: 파일이 없으면 만듦 / APPEND: 있으면 뒤에 붙임
-      Files.writeString(path, jsonPayload + System.lineSeparator(),
+      Files.writeString(path, objectMapper.writeValueAsString(payload) + System.lineSeparator(),
           StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 
       log.warn("데이터가 로컬 파일에 안전하게 백업되었습니다: {}", path);
